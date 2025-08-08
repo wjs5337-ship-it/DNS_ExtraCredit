@@ -32,12 +32,12 @@ def dns_query(type, name, server):
         
         # You are responsible for making sure each value is in the right location!
             
-        # Each row in the diagram represents one byte (8 bits) of data, with the bit positions numbered along the top. 
+        # Each row in the diagram represents two bytes (16 bits) of data, with the bit positions numbered along the top. 
         # The fields in the DNS header are labeled and their sizes and positions are indicated by the boxes.
 
         # DNS Header Format (12 bytes / 96 bits)
         #
-        # 0	 1	2  3  4  5	6  7  8  9 10 11 12 13 14 15
+        # 0  1  2  3  4  5  6  7  8  9  10 11 12 13 14 15
         # +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
         # |                      MessageID                 |
         # +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
@@ -189,3 +189,4 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     result = dns_query(args.type, args.name, args.server)
+
