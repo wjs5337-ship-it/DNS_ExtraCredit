@@ -27,13 +27,28 @@ def dns_query(type, name, server):
     NSCOUNT = 0
     ARCOUNT = 0
 
-        # The DNS header is a fixed-size (12 bytes), containing several fields with information about the query. These fields are packed into a binary string in network byte order 
-        # The values of these fields are combined using bitwise operations (<< for left shift and | for bitwise OR) to form a single 16-bit value, which is then packed into the binary string.
-        
-        # You are responsible for making sure each value is in the right location!
-            
-        # Each row in the diagram represents two bytes (16 bits) of data, with the bit positions numbered along the top. 
-        # The fields in the DNS header are labeled and their sizes and positions are indicated by the boxes.
+        # The DNS header is fixed-size: 12 bytes total.
+        # It consists of six 16-bit fields, stored in network byte order
+        # (big-endian: most significant byte first).
+        #
+        # Some fields, like MessageID and QDCount, use all 16 bits directly.
+        # The Flags field is also 16 bits, but it is divided into smaller pieces:
+        # QR, Opcode, AA, TC, RD, RA, Z, and RCODE.
+        #
+        # To create the Flags field, each smaller value must be moved into its
+        # correct bit position using left shifts (<<). The shifted values are then
+        # combined with bitwise OR (|) to produce one final 16-bit number.
+        #
+        # For example, QR appears as the leftmost bit in the diagram, which means it
+        # is the most significant bit of the 16-bit Flags field. In code, that is
+        # position 15, so QR is placed using qr << 15.
+        #
+        # Be careful: you are responsible for putting each value in the correct
+        # position before packing the header into bytes.
+        #
+        # In the diagram below, each row represents 16 bits (remember 8 bits = 1 byte).
+        # The numbers across the top are bit positions within each 16-bit row.
+        # The labeled boxes show the size and location of each DNS header field.
 
         # DNS Header Format (12 bytes / 96 bits)
         #
